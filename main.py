@@ -1,6 +1,6 @@
 import socket
 
-PORT = 1237  # Port to listen on (non-privileged ports are > 1023)
+PORT = 1238  # Port to listen on (non-privileged ports are > 1023)
 
 HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
 
@@ -37,7 +37,9 @@ while True:
             data = conn.recv(1024)
             s = data.decode('utf-8')
             try:
-                with open(get_target_filename(s), 'r') as f:
+                path = get_target_filename(s)
+                print(f"getting path: {path}")
+                with open(path, 'r') as f:
                     data = f.read()
                 conn.sendall(f"HTTP/1.1 200 OK \r\n\
                         Content-Length: {len(data)} \r\n\
