@@ -1,6 +1,6 @@
 import socket
 
-PORT = 1237  # Port to listen on (non-privileged ports are > 1023)
+PORT = 1234  # Port to listen on (non-privileged ports are > 1023)
 
 HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
 
@@ -13,14 +13,14 @@ socket.listen()
 def parse_http(s: str):
     out = {}
     lines = s.split("\r\n")
+    print(lines)
+    #for line in lines:
+        #key, value = line.split(":", 1)
+        #out[key] = value
 
-    for line in lines:
-        key, value = line.split(":", 1)
-        out[key] = value
 
-
-while True:
-    try:
+try:
+    while True:
         conn, addr = socket.accept()
         with conn:
             print(f"Connected by {addr}")
@@ -30,8 +30,12 @@ while True:
                 parse_http(s)
 
                 if not data:
+                    print("broke")
                     break
-                conn.sendall(data)
-    except Exception as e:
-        print(f"closing socket bc error {e}")
-        socket.close()
+                #conn.sendall(data)
+            print("out")
+            conn.sendall("HTTP/1.1 204 No Content".encode("UTF-8"))
+            conn.close()
+except KeyboardInterrupt:
+    print("FUCKKKKKk")
+    socket.close()
